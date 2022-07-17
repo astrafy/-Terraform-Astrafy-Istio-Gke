@@ -14,6 +14,10 @@ terraform {
       source  = "hashicorp/kubernetes"
       version = "2.12.1"
     }
+    helm = {
+      source  = "hashicorp/helm"
+      version = "2.6.0"
+    }
   }
   cloud {
     organization = "astrafy"
@@ -24,6 +28,14 @@ terraform {
   }
 }
 
+
+provider "helm" {
+  # Configuration options
+  kubernetes { # TODO : use token, via root module
+    host  = var.cluster_host
+    token = data.google_client_config.default.access_token
+  }
+}
 provider "google" {
   # Configuration options
   project = var.project_id_gke
