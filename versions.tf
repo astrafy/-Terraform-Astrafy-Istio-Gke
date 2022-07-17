@@ -4,50 +4,35 @@ terraform {
   required_providers {
     google = {
       source  = "hashicorp/google"
-      version = "4.28.0"
+      version = ">=4.28.0"
     }
     google-beta = {
       source  = "hashicorp/google-beta"
-      version = "4.28.0"
+      version = ">=4.28.0"
     }
     kubernetes = {
       source  = "hashicorp/kubernetes"
-      version = "2.12.1"
+      version = ">=2.12.1"
     }
     helm = {
       source  = "hashicorp/helm"
-      version = "2.6.0"
-    }
-  }
-  cloud {
-    organization = "astrafy"
-
-    workspaces {
-      name = "istio-gke-tmp"
+      version = ">=2.6.0"
     }
   }
 }
-
 
 provider "helm" {
   # Configuration options
-  kubernetes { # TODO : use token, via root module
-    host                   = var.cluster_host
-    token                  = data.google_client_config.default.access_token
-    cluster_ca_certificate = base64decode(var.cluster_ca_certificate)
-  }
 }
+
 provider "google" {
   # Configuration options
-  project = var.project_id_gke
 }
 
 provider "google-beta" {
   # Configuration options
 }
 
-provider "kubernetes" { # TODO : use token, via root
-  host                   = var.cluster_host
-  token                  = data.google_client_config.default.access_token
-  cluster_ca_certificate = base64decode(var.cluster_ca_certificate)
+provider "kubernetes" {
+  # Configuration options
 }
