@@ -13,7 +13,7 @@ resource "kubernetes_namespace" "istio_ingress" {
   }
 }
 
-resource "kubernetes_ingress" "istio" {
+resource "kubernetes_ingress_v1" "istio" {
   metadata {
     name      = "istio-ingress"
     namespace = kubernetes_namespace.istio_ingress.metadata.0.name
