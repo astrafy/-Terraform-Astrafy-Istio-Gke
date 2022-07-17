@@ -3,3 +3,12 @@ resource "kubernetes_namespace" "istio_system" {
     name = "istio-system"
   }
 }
+
+resource "kubernetes_namespace" "istio_ingress" {
+  metadata {
+    name = "istio-ingress"
+    labels = {
+      istio-injection = "enabled"
+    }
+  }
+}
