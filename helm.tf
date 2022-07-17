@@ -24,7 +24,7 @@ resource "helm_release" "istio_ingress" {
   repository = "https://istio-release.storage.googleapis.com/charts"
   chart      = "gateway"
   version    = "1.14.1"
-  namespace  = kubernetes_namespace.istio_system.metadata.0.name
+  namespace  = kubernetes_namespace.istio_ingress.metadata.0.name
 
   values = [
     file("${path.module}/istio/ingress.yaml")
