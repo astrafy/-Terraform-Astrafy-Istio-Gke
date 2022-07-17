@@ -24,3 +24,11 @@ variable "cluster_node_network_tags" {
   type        = list(string)
   default     = null
 }
+
+variable "istio_ingress_configuration" {
+  description = "Istio Ingress configuration"
+  type = object({
+    allow_http = bool
+    hosts      = list(string)
+  })
+}
