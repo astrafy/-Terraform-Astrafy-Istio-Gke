@@ -36,7 +36,6 @@ resource "kubernetes_ingress_v1" "istio" {
               service {
                 name = helm_release.istio_ingress.name # Set as service name
                 port {
-                  name   = "http"
                   number = 80
                 }
               }
