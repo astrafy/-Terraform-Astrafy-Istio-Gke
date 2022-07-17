@@ -32,8 +32,9 @@ terraform {
 provider "helm" {
   # Configuration options
   kubernetes { # TODO : use token, via root module
-    host  = var.cluster_host
-    token = data.google_client_config.default.access_token
+    host                   = var.cluster_host
+    token                  = data.google_client_config.default.access_token
+    cluster_ca_certificate = base64decode(var.cluster_ca_certificate)
   }
 }
 provider "google" {
@@ -43,4 +44,10 @@ provider "google" {
 
 provider "google-beta" {
   # Configuration options
+}
+
+provider "kubernetes" { # TODO : use token, via root
+  host                   = var.cluster_host
+  token                  = data.google_client_config.default.access_token
+  cluster_ca_certificate = base64decode(var.cluster_ca_certificate)
 }

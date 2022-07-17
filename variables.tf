@@ -32,3 +32,8 @@ variable "project_id_gke" { # TODO : configure via root provider when this is se
 variable "cluster_host" { # TODO : configure via root provider when this is setup as a module
   type = string
 }
+
+variable "cluster_ca_certificate" { # TODO : configure via root provider when this is setup as a module
+  type = string
+
+}
