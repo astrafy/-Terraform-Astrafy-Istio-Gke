@@ -86,56 +86,23 @@ resource "kubernetes_manifest" "istio_gateway" {
       ]
     }
   }
+  depends_on = [helm_release.istio_base]
 }
 
-resource "kubernetes_manifest" "istio_virtual_service_health_check" {
+resource "kubernetes_manifest" "backend_config" {
   manifest = {
-    apiVersion = "networking.istio.io/v1alpha3"
-    kind       = "VirtualService"
+    apiVersion = "cloud.google.com/v1"
+    kind       = "BackendConfig"
     metadata = {
-      name      = "health"
+      name      = "ingress-backendconfig"
       namespace = kubernetes_namespace.istio_ingress.metadata.0.name
     }
     spec = {
-      gateways = [
-        kubernetes_manifest.istio_gateway.manifest.metadata.name
-      ]
-      hosts = [
-        "*"
-      ]
-      http = [
-        {
-          match = [
-            {
-              headers = {
-                user-agent = {
-                  prefix = "GoogleHC"
-                }
-              }
-              method = {
-                exact = "GET"
-              }
-              uri = {
-                exact = "/"
-              }
-            }
-          ]
-          rewrite = {
-            authority = "${helm_release.istio_ingress.name}.${kubernetes_namespace.istio_ingress.metadata.0.name}.svc.cluser.local:15021"
-            uri       = "/healthz/ready"
-          }
-          route = [
-            {
-              destination = {
-                host = "${helm_release.istio_ingress.name}.${kubernetes_namespace.istio_ingress.metadata.0.name}.svc.cluser.local"
-                port = {
-                  number = 15021
-                }
-              }
-            }
-          ]
-        }
-      ]
+      healthCheck = {
+        requestPath = "/healthz/ready"
+        port        = 15021
+        type        = "HTTP"
+      }
     }
   }
 }
