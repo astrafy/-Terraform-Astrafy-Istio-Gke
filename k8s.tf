@@ -61,3 +61,81 @@ resource "kubernetes_manifest" "istio_managed_certificate" {
     }
   }
 }
+
+resource "kubernetes_manifest" "istio_gateway" {
+  manifest = {
+    apiVersion = "networking.istio.io/v1alpha3"
+    kind       = "Gateway"
+    metadata = {
+      name      = "istio-gateway"
+      namespace = kubernetes_namespace.istio_ingress.metadata.0.name
+    }
+    spec = {
+      selector = {
+        istio = "ingress"
+      }
+      servers = [
+        {
+          hosts = ["*"]
+          port = {
+            name     = "http"
+            number   = 80
+            protocol = "HTTP"
+          }
+        }
+      ]
+    }
+  }
+}
+
+resource "kubernetes_manifest" "istio_virtual_service_health_check" {
+  manifest = {
+    apiVersion = "networking.istio.io/v1alpha3"
+    kind       = "VirtualService"
+    metadata = {
+      name      = "health"
+      namespace = kubernetes_namespace.istio_ingress.metadata.0.name
+    }
+    spec = {
+      gateways = [
+        kubernetes_manifest.istio_gateway.manifest.metadata.name
+      ]
+      hosts = [
+        "*"
+      ]
+      http = [
+        {
+          match = [
+            {
+              headers = {
+                user-agent = {
+                  prefix = "GoogleHC"
+                }
+              }
+              method = {
+                exact = "GET"
+              }
+              uri = {
+                exact = "/"
+              }
+            }
+          ]
+          rewrite = {
+            authority = "${helm_release.istio_ingress.name}.${kubernetes_namespace.istio_ingress.metadata.0.name}.svc.cluser.local:15021"
+            uri       = "/healthz/ready"
+          }
+          route = [
+            {
+              destination = {
+                host = "${helm_release.istio_ingress.name}.${kubernetes_namespace.istio_ingress.metadata.0.name}.svc.cluser.local"
+                port = {
+                  number = 15021
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
