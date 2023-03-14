@@ -25,12 +25,6 @@ repos:
       hooks:
         - id: terraform_fmt
         # - id: terraform_validate # Doesn't apply for terraform module
-    - repo: https://github.com/pycqa/isort
-      rev: 5.10.1
-      hooks:
-        - id: isort
-          name: isort (python)
-          types: [ file, python ]
     -   repo: https://github.com/psf/black
         rev: 22.6.0
         hooks:

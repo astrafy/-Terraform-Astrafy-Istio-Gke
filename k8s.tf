@@ -63,6 +63,7 @@ resource "kubernetes_manifest" "istio_managed_certificate" {
 }
 
 resource "kubernetes_manifest" "istio_gateway" {
+  count = var.use_crds ? 1 : 0
   manifest = {
     apiVersion = "networking.istio.io/v1alpha3"
     kind       = "Gateway"

@@ -49,6 +49,7 @@ No modules.
 | <a name="input_istio_ingress_configuration"></a> [istio\_ingress\_configuration](#input\_istio\_ingress\_configuration) | Istio Ingress configuration | <pre>object({<br>    allow_http = bool<br>    hosts      = list(string)<br>  })</pre> | n/a | yes |
 | <a name="input_master_cidr_range"></a> [master\_cidr\_range](#input\_master\_cidr\_range) | CIDR range of GKE master node when using private cluster. Required when `private_cluster` is `true` | `string` | `null` | no |
 | <a name="input_private_cluster"></a> [private\_cluster](#input\_private\_cluster) | Indicate if installing on a private cluster or not. Required for additional firewall rules | `bool` | n/a | yes |
+| <a name="input_use_crds"></a> [use\_crds](#input\_use\_crds) | Use CRDs. Set to false during initial installation to prevent CRDs to be used when they don't exist | `bool` | `true` | no |
 | <a name="input_vpc_network_id"></a> [vpc\_network\_id](#input\_vpc\_network\_id) | VPC network ID to use to add additional firewall rules in private cluster. Required when `private_cluster` is `true` | `string` | `null` | no |
 
 ## Outputs

@@ -32,3 +32,9 @@ variable "istio_ingress_configuration" {
     hosts      = list(string)
   })
 }
+
+variable "use_crds" {
+  description = "Use CRDs. Set to false during initial installation to prevent CRDs to be used when they don't exist"
+  type        = bool
+  default     = true
+}
