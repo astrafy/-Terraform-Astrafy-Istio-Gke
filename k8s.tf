@@ -107,3 +107,42 @@ resource "kubernetes_manifest" "backend_config" {
     }
   }
 }
+
+resource "kubernetes_manifest" "istio_virtual_services" {
+  for_each = var.virtual_services
+  manifest = {
+    apiVersion = "networking.istio.io/v1alpha3"
+    kind       = "VirtualService"
+    metadata = {
+      name      = each.key
+      namespace = each.value.target_namespace
+    }
+    spec = {
+      gateways = [
+        "${kubernetes_namespace.istio_ingress.metadata.0.name}/${kubernetes_manifest.istio_gateway[0].manifest.metadata.name}"
+      ]
+      hosts = each.value.hosts
+      http = [
+        {
+          match = [
+            {
+              uri = {
+                prefix = "/"
+              }
+            }
+          ]
+          route = [
+            {
+              destination = {
+                host = "${each.value.target_service}.${each.value.target_namespace}.svc.cluster.local"
+                port = {
+                  number = each.value.port_number
+                }
+              }
+            },
+          ]
+        }
+      ]
+    }
+  }
+}

@@ -38,3 +38,14 @@ variable "use_crds" {
   type        = bool
   default     = true
 }
+
+variable "virtual_services" {
+  description = "Virtual Services to create"
+  type = map(object({
+    target_namespace = string
+    hosts            = list(string)
+    target_service   = string
+    port_number      = number
+  }))
+  default = {}
+}
