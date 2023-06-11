@@ -3,7 +3,7 @@
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.2.4 |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.3.0 |
 | <a name="requirement_google"></a> [google](#requirement\_google) | >=4.28.0 |
 | <a name="requirement_google-beta"></a> [google-beta](#requirement\_google-beta) | >=4.28.0 |
 | <a name="requirement_helm"></a> [helm](#requirement\_helm) | >=2.6.0 |
@@ -47,7 +47,7 @@ No modules.
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_cluster_node_network_tags"></a> [cluster\_node\_network\_tags](#input\_cluster\_node\_network\_tags) | Network tags of the nodes. Used in private cluster to add additional firewall rules. Required when `private_cluster` is `true` | `list(string)` | `null` | no |
-| <a name="input_istio_ingress_configuration"></a> [istio\_ingress\_configuration](#input\_istio\_ingress\_configuration) | Istio Ingress configuration | <pre>object({<br>    allow_http = bool<br>    hosts      = list(string)<br>  })</pre> | n/a | yes |
+| <a name="input_istio_ingress_configuration"></a> [istio\_ingress\_configuration](#input\_istio\_ingress\_configuration) | Istio Ingress configuration | <pre>object({<br>    allow_http = bool<br>    hosts = list(object({<br>      host            = string<br>      backend_service = optional(string)<br>    }))<br>  })</pre> | n/a | yes |
 | <a name="input_master_cidr_range"></a> [master\_cidr\_range](#input\_master\_cidr\_range) | CIDR range of GKE master node when using private cluster. Required when `private_cluster` is `true` | `string` | `null` | no |
 | <a name="input_private_cluster"></a> [private\_cluster](#input\_private\_cluster) | Indicate if installing on a private cluster or not. Required for additional firewall rules | `bool` | n/a | yes |
 | <a name="input_use_crds"></a> [use\_crds](#input\_use\_crds) | Use CRDs. Set to false during initial installation to prevent CRDs to be used when they don't exist | `bool` | `true` | no |

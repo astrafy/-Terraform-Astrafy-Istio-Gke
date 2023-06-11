@@ -29,7 +29,10 @@ variable "istio_ingress_configuration" {
   description = "Istio Ingress configuration"
   type = object({
     allow_http = bool
-    hosts      = list(string)
+    hosts = list(object({
+      host            = string
+      backend_service = optional(string)
+    }))
   })
 }
 

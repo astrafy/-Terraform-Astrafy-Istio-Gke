@@ -26,7 +26,8 @@ resource "kubernetes_ingress_v1" "istio" {
   spec {
     dynamic "rule" {
       for_each = [for host in var.istio_ingress_configuration.hosts : {
-        host = host
+        host            = host.host
+        backend_service = host.backend_service
       }]
       content {
         host = rule.value.host
@@ -34,7 +35,7 @@ resource "kubernetes_ingress_v1" "istio" {
           path {
             backend {
               service {
-                name = helm_release.istio_ingress.name # Set as service name
+                name = coalesce(rule.value.backend_service, helm_release.istio_ingress.name) # Set as service name
                 port {
                   number = 80
                 }
@@ -57,7 +58,7 @@ resource "kubernetes_manifest" "istio_managed_certificate" {
       namespace = kubernetes_namespace.istio_ingress.metadata.0.name
     }
     spec = {
-      domains = var.istio_ingress_configuration.hosts
+      domains = [for host in var.istio_ingress_configuration.hosts : host.host]
     }
   }
 }
