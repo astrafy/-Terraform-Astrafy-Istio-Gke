@@ -58,3 +58,9 @@ variable "address_name" {
   type        = string
   default     = ""
 }
+
+variable "shared_vpc_project_id" {
+  description = "Shared VPC project ID. Only used if `private_cluster` is `true`"
+  type        = string
+  default     = null
+}

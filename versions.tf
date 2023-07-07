@@ -24,3 +24,9 @@ terraform {
     }
   }
 }
+
+provider "google" {
+  # Configuration options
+  # Credentials configured in the Terraform workspace
+  project = var.shared_vpc_project_id
+}
