@@ -52,3 +52,9 @@ variable "virtual_services" {
   }))
   default = {}
 }
+
+variable "address_name" {
+  description = "Suffix to add to the address. Used to be able to deploy this module in the same project several times."
+  type        = string
+  default     = ""
+}
