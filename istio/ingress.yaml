@@ -3,3 +3,4 @@ service:
   type: NodePort
   annotations:
     "cloud.google.com/backend-config": '{"default": "ingress-backendconfig"}'
+    "cloud.google.com/neg": '{"ingress":true}'
