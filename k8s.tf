@@ -50,7 +50,7 @@ resource "kubernetes_ingress_v1" "istio" {
 }
 
 resource "kubernetes_manifest" "istio_managed_certificate" {
-  for_each = [for host in var.istio_ingress_configuration.hosts : host.host]
+  for_each = toset([for host in var.istio_ingress_configuration.hosts : host.host])
   manifest = {
     apiVersion = "networking.gke.io/v1"
     kind       = "ManagedCertificate"
