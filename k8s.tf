@@ -111,7 +111,8 @@ resource "kubernetes_manifest" "backend_config" {
 }
 
 resource "kubernetes_manifest" "istio_virtual_services" {
-  for_each = var.virtual_services
+  for_each = var.use_crds ? var.virtual_services : {}
+
   manifest = {
     apiVersion = "networking.istio.io/v1alpha3"
     kind       = "VirtualService"
