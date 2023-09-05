@@ -35,7 +35,7 @@ resource "kubernetes_ingress_v1" "istio" {
           path {
             backend {
               service {
-                name = coalesce(rule.value.backend_service, helm_release.istio_ingress.name) # Set as service name
+                name = coalesce(rule.value.backend_service, "istio-ingress") # Set as service name
                 port {
                   number = 80
                 }
@@ -46,7 +46,7 @@ resource "kubernetes_ingress_v1" "istio" {
       }
     }
   }
-  depends_on = [helm_release.istio_ingress]
+
 }
 
 resource "kubernetes_manifest" "istio_managed_certificate" {
@@ -89,7 +89,7 @@ resource "kubernetes_manifest" "istio_gateway" {
       ]
     }
   }
-  depends_on = [helm_release.istio_base]
+
 }
 
 resource "kubernetes_manifest" "backend_config" {
