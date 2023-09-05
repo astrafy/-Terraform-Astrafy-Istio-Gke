@@ -52,3 +52,15 @@ variable "virtual_services" {
   }))
   default = {}
 }
+
+variable "address_name" {
+  description = "Suffix to add to the address. Used to be able to deploy this module in the same project several times."
+  type        = string
+  default     = ""
+}
+
+variable "shared_vpc_project_id" {
+  description = "Shared VPC project ID. Only used if `private_cluster` is `true`"
+  type        = string
+  default     = null
+}
