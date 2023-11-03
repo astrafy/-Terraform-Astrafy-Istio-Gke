@@ -35,7 +35,7 @@ resource "kubernetes_ingress_v1" "istio" {
           path {
             backend {
               service {
-                name = coalesce(rule.value.backend_service, "istio-ingress") # Set as service name
+                name = coalesce(rule.value.backend_service, helm_release.istio_ingress.name) # Set as service name
                 port {
                   number = 80
                 }
@@ -46,7 +46,7 @@ resource "kubernetes_ingress_v1" "istio" {
       }
     }
   }
-
+  depends_on = [helm_release.istio_ingress]
 }
 
 resource "kubernetes_manifest" "istio_managed_certificate" {
@@ -89,7 +89,7 @@ resource "kubernetes_manifest" "istio_gateway" {
       ]
     }
   }
-
+  depends_on = [helm_release.istio_base]
 }
 
 resource "kubernetes_manifest" "backend_config" {
@@ -98,6 +98,24 @@ resource "kubernetes_manifest" "backend_config" {
     kind       = "BackendConfig"
     metadata = {
       name      = "ingress-backendconfig"
+      namespace = kubernetes_namespace.istio_ingress.metadata.0.name
+    }
+    spec = {
+      healthCheck = {
+        requestPath = "/healthz/ready"
+        port        = 15021
+        type        = "HTTP"
+      }
+    }
+  }
+}
+
+resource "kubernetes_manifest" "backend_config_iap" {
+  manifest = {
+    apiVersion = "cloud.google.com/v1"
+    kind       = "BackendConfig"
+    metadata = {
+      name      = "ingress-backendconfig-iap"
       namespace = kubernetes_namespace.istio_ingress.metadata.0.name
     }
     spec = {

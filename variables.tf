@@ -33,6 +33,10 @@ variable "istio_ingress_configuration" {
       host            = string
       backend_service = optional(string)
     }))
+    hosts_iap = list(object({
+      host            = string
+      backend_service = optional(string)
+    }))
   })
 }
 
