@@ -167,7 +167,8 @@ resource "kubernetes_manifest" "istio_virtual_services" {
     }
     spec = {
       gateways = [
-        "${kubernetes_namespace.istio_ingress.metadata.0.name}/${kubernetes_manifest.istio_gateway[0].manifest.metadata.name}"
+        "${kubernetes_namespace.istio_ingress.metadata.0.name}/${kubernetes_manifest.istio_gateway[0].manifest.metadata.name}",
+        "${kubernetes_namespace.istio_ingress.metadata.0.name}/${kubernetes_manifest.istio_gateway_iap[0].manifest.metadata.name}",
       ]
       hosts = each.value.hosts
       http = [
