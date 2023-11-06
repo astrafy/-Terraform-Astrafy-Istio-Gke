@@ -92,6 +92,34 @@ resource "kubernetes_manifest" "istio_gateway" {
   depends_on = [helm_release.istio_base]
 }
 
+resource "kubernetes_manifest" "istio_gateway_iap" {
+  count = var.use_crds ? 1 : 0
+  manifest = {
+    apiVersion = "networking.istio.io/v1alpha3"
+    kind       = "Gateway"
+    metadata = {
+      name      = "istio-gateway-iap"
+      namespace = kubernetes_namespace.istio_ingress.metadata.0.name
+    }
+    spec = {
+      selector = {
+        istio = "ingress-iap"
+      }
+      servers = [
+        {
+          hosts = ["*"]
+          port = {
+            name     = "http"
+            number   = 80
+            protocol = "HTTP"
+          }
+        }
+      ]
+    }
+  }
+  depends_on = [helm_release.istio_base]
+}
+
 resource "kubernetes_manifest" "backend_config" {
   manifest = {
     apiVersion = "cloud.google.com/v1"
